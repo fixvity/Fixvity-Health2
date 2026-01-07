@@ -28,7 +28,7 @@ body{
 .card{
   background:var(--card);
   border-radius:var(--radius);
-  padding:30px; /* slightly increased */
+  padding:30px;
   box-shadow:0 12px 32px rgba(0,0,0,.08);
 }
 h1{margin:0;color:var(--primary)}
@@ -63,8 +63,8 @@ button:hover{opacity:.95}
 .result{
   font-weight:700;
   font-size:18px;
-  line-height:1.9; /* FIX #2: more vertical breathing */
-  padding:10px 0;  /* FIX #2 */
+  line-height:1.9;
+  padding:10px 0;
 }
 .error{
   color:#dc2626;
@@ -74,7 +74,7 @@ button:hover{opacity:.95}
 
 canvas{
   width:100%!important;
-  height:280px!important; /* FIX #1 */
+  height:280px!important;
 }
 </style>
 </head>
@@ -199,14 +199,15 @@ function renderChart(bmr,loss,maintain,gain){
     options:{
       responsive:true,
       maintainAspectRatio:false,
-      layout:{padding:{bottom:20}}, /* FIX #1 */
+      layout:{padding:{bottom:30}},   // FIX 1
       plugins:{legend:{display:false}},
       scales:{
         x:{
           ticks:{
+            autoSkip:false,          // FIX 2 (MOST IMPORTANT)
             maxRotation:0,
             minRotation:0,
-            padding:10
+            padding:12
           }
         },
         y:{beginAtZero:true}
