@@ -28,7 +28,7 @@ body{
 .card{
   background:var(--card);
   border-radius:var(--radius);
-  padding:26px;
+  padding:30px; /* slightly increased */
   box-shadow:0 12px 32px rgba(0,0,0,.08);
 }
 h1{margin:0;color:var(--primary)}
@@ -37,7 +37,7 @@ small{color:#555}
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px;
+  gap:18px;
 }
 
 input,select{
@@ -63,7 +63,8 @@ button:hover{opacity:.95}
 .result{
   font-weight:700;
   font-size:18px;
-  line-height:1.7;
+  line-height:1.9; /* FIX #2: more vertical breathing */
+  padding:10px 0;  /* FIX #2 */
 }
 .error{
   color:#dc2626;
@@ -73,7 +74,7 @@ button:hover{opacity:.95}
 
 canvas{
   width:100%!important;
-  height:260px!important;
+  height:280px!important; /* FIX #1 */
 }
 </style>
 </head>
@@ -96,7 +97,6 @@ canvas{
 
   <input id="age" type="number" min="1" placeholder="Age (years)">
 
-  <!-- WEIGHT -->
   <input id="weight" type="number" min="1" placeholder="Weight">
   <select id="weightUnit">
     <option value="kg">kg</option>
@@ -104,7 +104,6 @@ canvas{
     <option value="st">stone</option>
   </select>
 
-  <!-- HEIGHT -->
   <input id="height" type="number" min="1" placeholder="Height">
   <select id="heightUnit">
     <option value="cm">cm</option>
@@ -161,11 +160,8 @@ function calculateBMR(){
     return;
   }
 
-  /* Weight → kg */
   if(weightUnit==="lb") weight*=0.453592;
   if(weightUnit==="st") weight*=6.35029;
-
-  /* Height → cm */
   if(heightUnit==="ft") height*=30.48;
   if(heightUnit==="m") height*=100;
 
@@ -202,8 +198,19 @@ function renderChart(bmr,loss,maintain,gain){
     },
     options:{
       responsive:true,
+      maintainAspectRatio:false,
+      layout:{padding:{bottom:20}}, /* FIX #1 */
       plugins:{legend:{display:false}},
-      scales:{y:{beginAtZero:true}}
+      scales:{
+        x:{
+          ticks:{
+            maxRotation:0,
+            minRotation:0,
+            padding:10
+          }
+        },
+        y:{beginAtZero:true}
+      }
     }
   });
 }
