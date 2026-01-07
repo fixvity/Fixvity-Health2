@@ -199,15 +199,15 @@ function renderChart(bmr,loss,maintain,gain){
     options:{
       responsive:true,
       maintainAspectRatio:false,
-      layout:{padding:{bottom:30}},   // FIX 1
+      layout:{padding:{bottom:40}},
       plugins:{legend:{display:false}},
       scales:{
         x:{
           ticks:{
-            autoSkip:false,          // FIX 2 (MOST IMPORTANT)
-            maxRotation:0,
-            minRotation:0,
-            padding:12
+            autoSkip:false,
+            maxRotation:35,
+            minRotation:35,
+            padding:14
           }
         },
         y:{beginAtZero:true}
