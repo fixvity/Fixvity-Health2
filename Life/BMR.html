@@ -81,7 +81,6 @@ canvas{
 <body>
 <div class="container">
 
-<!-- INPUT CARD -->
 <div class="card">
 <h1>BMR Calculator</h1>
 <small>Basal Metabolic Rate & Daily Calorie Needs (Mifflin–St Jeor Formula)</small>
@@ -96,8 +95,22 @@ canvas{
   </select>
 
   <input id="age" type="number" min="1" placeholder="Age (years)">
-  <input id="weight" type="number" min="1" placeholder="Weight (kg)">
-  <input id="height" type="number" min="1" placeholder="Height (cm)">
+
+  <!-- WEIGHT -->
+  <input id="weight" type="number" min="1" placeholder="Weight">
+  <select id="weightUnit">
+    <option value="kg">kg</option>
+    <option value="lb">lb</option>
+    <option value="st">stone</option>
+  </select>
+
+  <!-- HEIGHT -->
+  <input id="height" type="number" min="1" placeholder="Height">
+  <select id="heightUnit">
+    <option value="cm">cm</option>
+    <option value="ft">feet</option>
+    <option value="m">meters</option>
+  </select>
 
   <select id="activity">
     <option value="">Activity Level</option>
@@ -116,7 +129,6 @@ canvas{
 
 <br>
 
-<!-- RESULT + CHART -->
 <div class="grid">
   <div class="card">
     <div id="output" class="result">Result = —</div>
@@ -138,28 +150,32 @@ function calculateBMR(){
 
   const gender=document.getElementById("gender").value;
   const age=parseFloat(document.getElementById("age").value);
-  const weight=parseFloat(document.getElementById("weight").value);
-  const height=parseFloat(document.getElementById("height").value);
+  let weight=parseFloat(document.getElementById("weight").value);
+  let height=parseFloat(document.getElementById("height").value);
+  const weightUnit=document.getElementById("weightUnit").value;
+  const heightUnit=document.getElementById("heightUnit").value;
   const activity=parseFloat(document.getElementById("activity").value);
 
-  if(!gender || !age || !weight || !height || !activity){
+  if(!gender||!age||!weight||!height||!activity){
     error.innerText="Please enter all values correctly.";
     return;
   }
 
-  if(age<=0 || weight<=0 || height<=0){
-    error.innerText="Values must be greater than zero.";
-    return;
-  }
+  /* Weight → kg */
+  if(weightUnit==="lb") weight*=0.453592;
+  if(weightUnit==="st") weight*=6.35029;
 
-  // Mifflin–St Jeor Formula
+  /* Height → cm */
+  if(heightUnit==="ft") height*=30.48;
+  if(heightUnit==="m") height*=100;
+
   let bmr = gender==="male"
     ? (10*weight + 6.25*height - 5*age + 5)
     : (10*weight + 6.25*height - 5*age - 161);
 
-  const maintenance = bmr * activity;
-  const fatLoss = Math.max(maintenance - 500, bmr);
-  const muscleGain = maintenance + 500;
+  const maintenance=bmr*activity;
+  const fatLoss=Math.max(maintenance-500,bmr);
+  const muscleGain=maintenance+500;
 
   document.getElementById("output").innerHTML=`
     BMR: ${bmr.toFixed(0)} kcal/day<br>
@@ -173,7 +189,6 @@ function calculateBMR(){
 
 function renderChart(bmr,loss,maintain,gain){
   const ctx=document.getElementById("chart").getContext("2d");
-
   if(chartInstance) chartInstance.destroy();
 
   chartInstance=new Chart(ctx,{
